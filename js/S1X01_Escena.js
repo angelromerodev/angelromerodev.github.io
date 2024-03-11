@@ -70,10 +70,10 @@ function loadScene()
     )
 
     // Importar un modelo en gltf
-    const glloader = new GLTFLoader();
+    const glloader = new THREE.GLTFLoader();
 
-    glloader.load( 'models/RobotExpressive.glb', function ( gltf ) {
-    //glloader.load( 'models/robota/scene.gltf', function ( gltf ) {
+    //glloader.load( 'models/RobotExpressive.glb', function ( gltf ) {
+    glloader.load( 'models/robota/scene.gltf', function ( gltf ) {
         gltf.scene.position.y = 1;
         gltf.scene.rotation.y = -Math.PI/2;
         esfera.add( gltf.scene );
