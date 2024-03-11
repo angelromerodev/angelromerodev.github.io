@@ -9,8 +9,8 @@
  */
 
 // Modulos necesarios
-import * as THREE from "../lib/three.module.js";
-import {GLTFLoader} from "../lib/GLTFLoader.module.js";
+//import * as THREE from "../lib/three.module.js";
+//import {GLTFLoader} from "../lib/GLTFLoader.module.js";
 //const THREE = require("../lib/three.module.js");
 //const {GLTFLoader} = require("../lib/GLTFLoader.module.js");
 
