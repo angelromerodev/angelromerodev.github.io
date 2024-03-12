@@ -1,7 +1,14 @@
+<header>
+	<title>Backend dev's game</title>
+</header>
 <style>
 	body {
 	  margin: 0;
 	  background: #0c4a6e;
+	  background-image: url("images/sky2.jpg");
+	  background-size: cover;
+  		background-position: center;
+
 	}
   </style>
   
@@ -30,9 +37,21 @@
 	  0.1,
 	  1000
 	)
+	const textureLoader = new THREE.TextureLoader();
 	//camera.position.set(4.61, 2.74, 8)
 	camera.position.set(0, 3, 8)
-  
+	
+	const listener = new THREE.AudioListener();
+	camera.add(listener);
+	const audioLoader = new THREE.AudioLoader()
+	const backgroundSound = new THREE.Audio(listener);
+	audioLoader.load('./sounds/one_0.mp3', function(buffer) {
+		backgroundSound.setBuffer(buffer);
+		backgroundSound.setLoop(true);
+		backgroundSound.setVolume(0.4);
+		backgroundSound.play();
+	});
+
 	const renderer = new THREE.WebGLRenderer({
 	  alpha: true,
 	  antialias: true
@@ -49,6 +68,7 @@
 		height,
 		depth,
 		color = '#00ff00',
+		texture = "",
 		velocity = {
 		  x: 0,
 		  y: 0,
@@ -59,11 +79,25 @@
 		  y: 0,
 		  z: 0
 		},
-		zAcceleration = false
+		zAcceleration = false,
+		filter = false
 	  }) {
+		let mesh = null;
+		if(texture != "") {
+			const textureCube = textureLoader.load("./images/" + texture);
+			if(filter) {
+				textureCube.wrapS = THREE.RepeatWrapping;
+				textureCube.wrapT = THREE.RepeatWrapping;
+				textureCube.repeat.set( 4, 4 );
+
+			}
+			mesh = new THREE.MeshStandardMaterial({ color, map: textureCube })
+		} else {
+			mesh = new THREE.MeshStandardMaterial({ color })
+		}
 		super(
 		  new THREE.BoxGeometry(width, height, depth),
-		  new THREE.MeshStandardMaterial({ color })
+		  mesh
 		)
   
 		this.width = width
@@ -143,7 +177,9 @@
 		x: 0,
 		y: -0.01,
 		z: 0
-	  }
+	  },
+	  color: "white",
+	  texture: "roblox.jpg"
 	})
 	cube.castShadow = true
 	scene.add(cube)
@@ -152,12 +188,14 @@
 	  width: 10,
 	  height: 0.5,
 	  depth: 50,
-	  color: '#0369a1',
+	  color: 'white',
 	  position: {
 		x: 0,
 		y: -2,
 		z: 0
-	  }
+	  },
+	  texture: "Grass_02.png",
+	  filter: true
 	})
   
 	ground.receiveShadow = true
@@ -208,8 +246,6 @@
 		  if(cube.position.y < -1) {
 			cube.velocity.y = 0.08
 		  }
-		    
-			//console.log(cube.position)
 		  break
 	  }
 	})
@@ -242,11 +278,11 @@
 	  // movement code
 	  cube.velocity.x = 0
 	  cube.velocity.z = 0
-	  if (keys.a.pressed) cube.velocity.x = -0.05
-	  else if (keys.d.pressed) cube.velocity.x = 0.05
+	  if (keys.a.pressed && cube.position.x > -4.2) cube.velocity.x = -0.05
+	  else if (keys.d.pressed && cube.position.x < 4.2) cube.velocity.x = 0.05
   
-	  if (keys.s.pressed) cube.velocity.z = 0.05
-	  else if (keys.w.pressed) cube.velocity.z = -0.05
+	  if (keys.s.pressed && cube.position.z < 1.2) cube.velocity.z = 0.05
+	  else if (keys.w.pressed && cube.position.z > -4) cube.velocity.z = -0.05
   
 	  cube.update(ground)
 	  enemies.forEach((enemy) => {
@@ -259,15 +295,18 @@
 		) {
 		  cancelAnimationFrame(animationId)
 		}
+		if(enemy.position.z > 6) {
+			scene.remove(enemy)
+		}
 	  })
   
 	  if (frames % spawnRate === 0) {
-		if (spawnRate > 20) spawnRate -= 20
-  
+		if (spawnRate > 20) spawnRate -= 10
+		const size = Math.random() * (1 - 0.8) + 0.8;
 		const enemy = new Box({
-		  width: 1,
-		  height: 1,
-		  depth: 1,
+		  width: size,
+		  height: size,
+		  depth: size,
 		  position: {
 			x: (Math.random() - 0.5) * 10,
 			y: 0,
@@ -278,7 +317,8 @@
 			y: 0,
 			z: 0.005
 		  },
-		  color: 'red',
+		  color: 'white',
+		  texture: "donottouch.png",
 		  zAcceleration: true
 		})
 		enemy.castShadow = true
