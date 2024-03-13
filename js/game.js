@@ -1,5 +1,7 @@
 import * as THREE from 'three'
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+import { OrbitControls } from '../lib/OrbitControls.module.js'
+import { GLTFLoader } from '../lib/GLTFLoader.module.js'
+
 
 const endScreen = document.getElementById('endScreen');
 const finalScoreDisplay = document.getElementById('finalScore');
@@ -38,6 +40,71 @@ audioLoader.load('./sounds/jump_07.wav', function(buffer) {
     jumpSound.setLoop(false);
     jumpSound.setVolume(0.5);
 })
+
+const glloader = new GLTFLoader();
+glloader.load( './models/old_fence.glb', function ( gltf ) {
+    
+        gltf.scene.position.y = -2;
+        gltf.scene.position.z = -2.2;
+        gltf.scene.position.x = 5
+        gltf.scene.rotation.y = -Math.PI/2;
+        gltf.scene.children[0].scale.multiplyScalar(0.025);
+        scene.add(gltf.scene)
+    
+    }, undefined, function ( error ) {
+    
+        console.error( error );
+    
+    } );
+
+    glloader.load( './models/old_fence.glb', function ( gltf ) {
+        
+            gltf.scene.position.y = -2;
+            gltf.scene.position.z = -12.2;
+            gltf.scene.position.x = 5
+            gltf.scene.rotation.y = -Math.PI/2;
+            gltf.scene.children[0].scale.multiplyScalar(0.025);
+            scene.add(gltf.scene)
+        
+        }, undefined, function ( error ) {
+        
+            console.error( error );
+        
+        } );
+
+glloader.load( './models/old_fence.glb', function ( gltf ) {
+       
+            gltf.scene.position.y = -2;
+            gltf.scene.position.z = -2.2;
+            gltf.scene.position.x = -5
+            gltf.scene.rotation.y = Math.PI/2;
+            
+            
+            gltf.scene.children[0].scale.multiplyScalar(0.025);
+            scene.add(gltf.scene)
+        
+        }, undefined, function ( error ) {
+        
+            console.error( error );
+        
+        } );
+
+        glloader.load( './models/old_fence.glb', function ( gltf ) {
+                gltf.scene.position.y = -2;
+                gltf.scene.position.z = -12.2;
+                gltf.scene.position.x = -5
+                gltf.scene.rotation.y = Math.PI/2;
+                
+                gltf.scene.children[0].scale.multiplyScalar(0.025);
+                scene.add(gltf.scene)
+            
+            }, undefined, function ( error ) {
+            
+                console.error( error );
+            
+            } );
+
+
 
 const renderer = new THREE.WebGLRenderer({
     alpha: true,
@@ -136,7 +203,6 @@ class Box extends THREE.Mesh {
     applyGravity(ground) {
     this.velocity.y += this.gravity
 
-    // this is where we hit the ground
     if (
         boxCollision({
         box1: this,
@@ -175,9 +241,9 @@ cube.castShadow = true
 scene.add(cube)
 
 const ground = new Box({
-    width: 10,
+    width: 13,
     height: 0.5,
-    depth: 50,
+    depth: 44,
     color: 'white',
     position: {
     x: 0,
@@ -198,10 +264,7 @@ light.castShadow = true
 scene.add(light)
 
 scene.add(new THREE.AmbientLight(0xffffff, 0.5))
-
 camera.position.z = 5
-console.log(ground.top)
-console.log(cube.bottom)
 
 const keys = {
     a: {
@@ -333,9 +396,6 @@ function animate() {
     }
 
     frames++
-    // cube.position.y += -0.01
-    // cube.rotation.x += 0.01
-    // cube.rotation.y += 0.01
 }
 animate()
 
