@@ -1,0 +1,10 @@
+Recursos utilizados: 
+
+https://opengameart.org/content/danger-do-not-touch-decal
+https://opengameart.org/content/cloudy-sky
+https://opengameart.org/content/one
+https://opengameart.org/content/tileable-grass-textures-set-1
+https://www.roblox.com/games/1003489845/Oof-Tycoon
+https://icon-icons.com/icon/GamePad-games/120527
+https://www.youtube.com/watch?v=ye0xG_QUI0A&themeRefresh=1
+https://sketchfab.com/3d-models/old-fence-3a98eabc0aa9475db5fcf7fab235751b
