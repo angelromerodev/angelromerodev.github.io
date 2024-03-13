@@ -32,6 +32,13 @@ audioLoader.load('./sounds/oof.mp3', function(buffer) {
     deathSound.setVolume(0.8);
 })
 
+const jumpSound = new THREE.Audio(listener);
+audioLoader.load('./sounds/jump_07.wav', function(buffer) {
+    jumpSound.setBuffer(buffer);
+    jumpSound.setLoop(false);
+    jumpSound.setVolume(0.5);
+})
+
 const renderer = new THREE.WebGLRenderer({
     alpha: true,
     antialias: true
@@ -43,6 +50,7 @@ document.body.appendChild(renderer.domElement)
 const controls = new OrbitControls(camera, renderer.domElement)
 controls.enablePan = false;
 controls.enableRotate = false;
+controls.enableZoom = false;
 
 class Box extends THREE.Mesh {
     constructor({
@@ -226,7 +234,8 @@ window.addEventListener('keydown', (event) => {
         break
     case 'Space':
         if(cube.position.y < -1) {
-        cube.velocity.y = 0.08
+            cube.velocity.y = 0.08
+            jumpSound.play()
         }
         break
     }
@@ -266,7 +275,7 @@ let scoreRefresh = setInterval(function() {
 const enemies = []
 
 let frames = 0
-let spawnRate = 200
+let spawnRate = 125
 function animate() {
     const animationId = requestAnimationFrame(animate)
     renderer.render(scene, camera)
@@ -298,14 +307,14 @@ function animate() {
     })
 
     if (frames % spawnRate === 0) {
-    if (spawnRate > 20) spawnRate -= 10
+    if (spawnRate > 12.5) spawnRate -= 2.5
     const size = Math.random() * (1 - 0.8) + 0.8;
     const enemy = new Box({
         width: size,
         height: size,
         depth: size,
         position: {
-        x: (Math.random() - 0.5) * 10,
+        x: (Math.random() - 0.5) * 8,
         y: 0,
         z: -20
         },
@@ -330,3 +339,13 @@ function animate() {
 }
 animate()
 
+window.addEventListener( 'resize', onWindowResize, false );
+
+function onWindowResize(){
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize( window.innerWidth, window.innerHeight );
+
+}
